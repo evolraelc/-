@@ -1,4 +1,3 @@
-#include "SimpleAudioEngine.h"
 #include "StartScene.h"
 USING_NS_CC;
 
@@ -34,6 +33,12 @@ bool Start::init()
 	Menu *mm1 = Menu::create(item,  NULL);
 	item->setPosition(200, -100);
 	this->addChild(mm1);
+
+	CCTMXTiledMap *map = CCTMXTiledMap::create("1.tmx");
+	map->setAnchorPoint(ccp(0.5f, 0.5f));
+	map->setPosition(ccp(visibleSize.width / 2, visibleSize.height / 2));
+	this->addChild(map);
+
 	return true;
 }
 
