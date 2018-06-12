@@ -2,58 +2,81 @@
 #ifndef __PLAYER_H__
 #define __PLAYER_H__
 
-#include"cocos2d.h"
-#include"Nation.h"
+#include "cocos2d.h"
+#include "Nation.h"
+#include "Architecture.h"
 #include<string>
 #include<iostream>
 using namespace std;
-using namespace cocos2d;
 /*Player类，继承自Node，记录玩家数据*/
 
-class Player :public cocos2d::Node
+class Player: public cocos2d::Sprite
 {
 private:
-	string _playerName;			//玩家姓名
-	Nation* _nation;
+	CC_SYNTHESIZE(string, player, _player);    //玩家名字
+	CC_SYNTHESIZE(Nation*, nation, _nation);   //阵营
+	CC_SYNTHESIZE(int, inithp, _inithp);       //初始血量
+	CC_SYNTHESIZE(int, hp, _hp);               //现在血量
+	CC_SYNTHESIZE(float, vel, _vel);           //初始速度
+	bool  _isDead = false;                     //玩家是否死亡
+	bool _alreadyDead = false;                 //玩家是否真正的死亡
 public:
-	bool init(string &name)
-	static Player* create(string &name);
-
-	void setPlayerName(string &name) { _playerName = name; };
-	string getPlayerName() { return _playerName; };
-	
-	void setNation(Nation &nation) { *_nation = nation; };
-	Nation* getNationName() { return _nation; };
-};
-
-
-bool Player::init(string &name)
-{
-	if (!Node::init())
+	Player();
+	Player(int inithp)
 	{
-		return false;
+		this->inithp = 100;
 	}
-	this->Player::setPlayerName(name);
-	return true;
-}
-
-
-Player* Player::create(string &name)
-{
-	auto pl = new Player;
-	if (pl&&pl->init(name))
+	void setSpeed(float speed)
 	{
-		return pl;
+		vel = speed;
 	}
-	else
+
+	float getSpeed()
 	{
+		return vel;
+	}
+
+	static Player* create(const std::string& filename)
+	{
+		Player *sprite = new Player();
+		if (sprite && sprite->initWithFile(filename))
+		{
+			sprite->autorelease();
+/*			sprite->setVisible(false);
+
+			auto body = PhysicsBody::createBox(sprite->getContentSize());
+
+			body->setCategoryBitmask(0x01);
+			body->setCollisionBitmask(0x02);
+			body->setContactTestBitmask(0x01);
+
+			sprite->setPhysicsBody(body);
+*/
+			return sprite;
+		}
+		CC_SAFE_DELETE(sprite);
 		return nullptr;
 	}
-}
+/*	void Birthplace(Arch *Arch)
+	{
+		this->setPosition(arch->getPosition() + cocos2d::Vec2(0, arch->getContentSize().height / 2));
+		this->setVisible(true);
+	}
+*/
+	void setPlayerDead()           //设置人物死亡
+	{
+		_isDead = true;
+	}
+
+	bool isDead()                 //判断人物是否死亡
+	{
+		return _isDead;
+	}
 
 
 
 
+};
 
 
 #endif // !__PLAYER_H__
