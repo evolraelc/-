@@ -1,6 +1,5 @@
 #include "SimpleAudioEngine.h"
 #include "MenuScene.h"
-#include "StartScene.h"
 #include "HelpScene.h"
 #include "GameScene.h"
 USING_NS_CC;
@@ -51,7 +50,7 @@ void Menu_S::menuGetCallback(cocos2d::Ref* pSender)
 
 void Menu_S::menuStartCallback(cocos2d::Ref* pSender)
 {
-	auto st = Game::createScece();
+	auto st = Game::createScene();
 	Director::getInstance()->pushScene(st);
 }
 
