@@ -3,7 +3,6 @@
 #define __PLAYER_H__
 
 #include "cocos2d.h"
-#include "Nation.h"
 #include "Architecture.h"
 #include<string>
 #include<iostream>
@@ -13,8 +12,6 @@ using namespace std;
 class Player: public cocos2d::Sprite
 {
 private:
-	CC_SYNTHESIZE(string, player, _player);    //玩家名字
-	CC_SYNTHESIZE(Nation*, nation, _nation);   //阵营
 	CC_SYNTHESIZE(int, inithp, _inithp);       //初始血量
 	CC_SYNTHESIZE(int, hp, _hp);               //现在血量
 	CC_SYNTHESIZE(float, vel, _vel);           //初始速度
