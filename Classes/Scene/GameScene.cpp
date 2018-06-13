@@ -2,6 +2,103 @@
 #include"ui/CocosGUI.h"
 USING_NS_CC;
 
+//MapLayer的函数定义
+
+
+bool MapLayer::init()
+{
+	if (!Layer::init())
+	{
+		return false;
+	}
+	auto visibleSize = Director::getInstance()->getVisibleSize();
+	Vec2 origin = Director::getInstance()->getVisibleOrigin();
+
+	_map = TMXTiledMap::create("tiled_map.tmx");
+	this->addChild(_map);
+
+	_collidable = _map->getLayer("water");
+	_collidable->setVisible(true);
+
+	return true;
+}
+
+
+bool MapLayer::clickDownToDrag(Event *event)
+{
+	auto eventMouse = static_cast<EventMouse*>(event);
+	auto target = static_cast<Layer*>(eventMouse->getCurrentTarget());
+	Vec2 locationInNode = target->convertToNodeSpace(eventMouse->getLocation());
+	Size s = target->getContentSize();
+	Rect rect = Rect(0, 0, s.width, s.height);
+	
+	log("%d", _isDrag);
+	_isDrag = true;
+	_posBeginDrag = this->convertToNodeSpace(eventMouse->getLocation());
+	return true;
+
+	/*if (rect.containsPoint(locationInNode))
+	{
+		_isDrag = true;
+		_posBeginDrag = this->convertToNodeSpace(eventMouse->getLocation());
+		return true;
+	}
+	else
+	{
+		return false;
+	}*/
+
+}
+
+void MapLayer::clickMoveToDrag(Event *event)
+{
+	auto eventMouse = static_cast<EventMouse*>(event);
+	auto target = static_cast<Layer*>(event->getCurrentTarget());
+
+
+	if (_isDrag)
+	{
+		log("%d %d", this->getPosition().x, this->getPositionY());
+		target->setPosition(target->getPosition() + (this->convertToNodeSpace(eventMouse->getLocation()) - _posBeginDrag));
+	}
+}
+
+void MapLayer::clickUpToDrag(Event *event)
+{
+	auto eventMouse = static_cast<EventMouse*>(event);
+	auto target = static_cast<Layer*>(event->getCurrentTarget());
+
+	/*Vec2 lacationInNode = target->convertToNodeSpace(eventMouse->getLocation());
+	Size s = target->getContentSize();
+	Rect rect = Rect(0, 0, s.width, s.height);
+	*/
+	_isDrag = false;
+}
+
+void MapLayer::onEnter()
+{
+	Layer::onEnter();
+	auto listener = EventListenerMouse::create();
+
+	listener->onMouseDown = CC_CALLBACK_1(MapLayer::clickDownToDrag, this);
+	listener->onMouseMove = CC_CALLBACK_1(MapLayer::clickMoveToDrag, this);
+	listener->onMouseUp = CC_CALLBACK_1(MapLayer::clickUpToDrag, this);
+
+	EventDispatcher *eventDispatcher = Director::getInstance()->getEventDispatcher();
+	eventDispatcher->addEventListenerWithSceneGraphPriority
+	(listener, this);
+}
+
+void MapLayer::onExit()
+{
+	Layer::onExit();
+	Director::getInstance()->getEventDispatcher()->removeAllEventListeners();
+}
+
+
+
+
+
 bool Game::init()
 {
 	if (!Scene::init())
@@ -12,24 +109,20 @@ bool Game::init()
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
 
-	this->initMap();
-	//this->initMenu();
+	this->initMapLayer();
 
+	//this->initMenu();
+	
 	return true;
 }
 
-void Game::initMap()
+void Game::initMapLayer()
 {
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
-	_tileMap = TMXTiledMap::create("tiled_map.tmx");
-	auto layer = Layer::create();
-	layer->addChild(_tileMap);
-	this->addChild(layer, 0, MAP_LAYER_TAG);
-
-	_collidable = _tileMap->getLayer("water");
-	_collidable->setVisible(true);
+	_mapLayer = MapLayer::create();
+	this->addChild(_mapLayer);
 }
 
 /*void Game::initVecMenuItem()
@@ -64,60 +157,6 @@ Game* Game::createScene()
 }
 
 
-void Game::onEnter()
-{
-	Scene::onEnter();
-	auto listener = EventListenerMouse::create();
 
-	listener->onMouseDown = CC_CALLBACK_1(Game::clickDown, this);
-	listener->onMouseMove = CC_CALLBACK_1(Game::clickMove, this);
-	listener->onMouseUp = CC_CALLBACK_1(Game::clickUp, this);
 
-	EventDispatcher *eventDispatcher = Director::getInstance()->getEventDispatcher();
-	eventDispatcher->addEventListenerWithSceneGraphPriority
-	(listener, this->getChildByTag(MAP_LAYER_TAG));
-}
 
-void Game::onExit()
-{
-	Scene::onExit();
-	Director::getInstance()->getEventDispatcher()->removeAllEventListeners();
-}
-
-bool Game::clickDown(Event *event)
-{
-	auto eventMouse = static_cast<EventMouse*>(event);
-	//为什么不行？auto target = static_cast<Layer*>(eventMouse->getCurrentTarget);
-	auto target = (eventMouse->getCurrentTarget);
-	Vec2 locationInNode = target->convertToNodeSpace(eventMouse->getLocation());
-	Size s = target->getContentSize();
-	Rect rect = Rect(0, 0, s.width, s.height);
-
-	if (rect.containsPoint(locationInNode))
-	{
-		return true;
-	}
-	else
-	{
-		return false;
-	}
-
-}
-
-void Game::clickMove(Event *event)
-{
-	auto eventMouse = static_cast<EventMouse*>(event);
-	auto target = static_cast<Layer*>(event->getCurrentTarget());
-	target->setPosition(target->getPosition() + eventMouse->getDelta());
-}
-
-void Game::clickUp(Event *event)
-{
-	auto eventMouse = static_cast<EventMouse*>(event);
-	auto target = static_cast<Layer*>(event->getCurrentTarget());
-
-	Vec2 lacationInNode = target->convertToNodeSpace(eventMouse->getLocation());
-	Size s = target->getContentSize();
-	Rect rect = Rect(0, 0, s.width, s.height);
-
-}
