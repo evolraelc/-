@@ -14,13 +14,13 @@ enum
 	MAP_LAYER_TAG,
 	MENU_LAYER_TAG
 };
-const string itemImageAdress[ITEM_AMOUNT + 1][3]
+const int spriteTag[ITEM_AMOUNT + 1]{ 0 };
+const string imageAdress[ITEM_AMOUNT + 1]
 {
-	"hello.png","hello.png","hello.png"
+	"test.png"
 };
 /*这个场景为游戏场景，分为三层：地图，菜单层，文本层*/
-
-
+class GameController;
 
 
 class MapLayer :public Layer
@@ -41,16 +41,30 @@ public:
 	void onEnter();
 	void onExit();
 	CREATE_FUNC(MapLayer);
+
+	friend class Game;
+	friend class GameController;
 };
 
 
-/*class MenuLayer :public Menu
+class MenuLayer :public Layer
 {
 private:
+	bool _isChosen;
+	int _kind;
+
 public:
 	bool init();
+	bool getIsChosen() { return _isChosen; };
+	void setIsChosen(bool a) { _isChosen = a; };
+	bool clickDownToChoose(Event* event);
 
-};*/
+	
+	CREATE_FUNC(MenuLayer);
+	friend class Game;
+	friend class GameController;
+
+};
 
 
 
@@ -59,16 +73,20 @@ class Game:public Scene
 {
 private:
 	MapLayer * _mapLayer;
+	MenuLayer *_menuLayer;
 
 	//static auto visibleSize = Director::getInstance()->getVisibleSize();
 	//static Vec2 origin = Director::getInstance()->getVisibleOrigin();
 public:
 	virtual bool init();
 	void initMapLayer();
-	//void initMenu();
+	void initMenuLayer();
+
+	MapLayer* getMapLayer() { return _mapLayer; };
+	MenuLayer* getMenuLayer() { return _menuLayer; };
 	static Game* createScene();
 	CREATE_FUNC(Game);
-
+	friend class GameController;
 
 };
 
