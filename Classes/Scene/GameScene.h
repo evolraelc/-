@@ -14,32 +14,57 @@ enum
 	MAP_LAYER_TAG,
 	MENU_LAYER_TAG
 };
-const string itemImageAdress[ITEM_AMOUNT + 1][3]
+const int spriteTag[ITEM_AMOUNT + 1]{ 0 };
+const string imageAdress[ITEM_AMOUNT + 1]
 {
-	"hello.png","hello.png","hello.png"
+	"test.png"
 };
 /*这个场景为游戏场景，分为三层：地图，菜单层，文本层*/
+class GameController;
 
 
-
-
-/*class MapLayer :public Layer
+class MapLayer :public Layer
 {
 private:
 	TMXTiledMap * _map;
 	TMXLayer * _collidable;
+
+	bool _isDrag;			//鼠标是否在拖动
+	Vec2 _posBeginDrag;
 public:
 	bool init();
-	Vec2 tileCoordFromPosition(Vec2 position);
+
+	bool clickDownToDrag(Event* event);
+	void clickMoveToDrag(Event *event);
+	void clickUpToDrag(Event *event);
+
+	void onEnter();
+	void onExit();
+	CREATE_FUNC(MapLayer);
+
+	friend class Game;
+	friend class GameController;
 };
 
 
-class MenuLayer :public Menu
+class MenuLayer :public Layer
 {
 private:
-	vector<Button*> constructButton;
+	bool _isChosen;
+	int _kind;
 
-};*/
+public:
+	bool init();
+	bool getIsChosen() { return _isChosen; };
+	void setIsChosen(bool a) { _isChosen = a; };
+	bool clickDownToChoose(Event* event);
+
+	
+	CREATE_FUNC(MenuLayer);
+	friend class Game;
+	friend class GameController;
+
+};
 
 
 
@@ -47,22 +72,22 @@ private:
 class Game:public Scene
 {
 private:
-	TMXTiledMap * _tileMap;
-	TMXLayer * _collidable;
+	MapLayer * _mapLayer;
+	MenuLayer *_menuLayer;
+
 	//static auto visibleSize = Director::getInstance()->getVisibleSize();
 	//static Vec2 origin = Director::getInstance()->getVisibleOrigin();
 public:
 	virtual bool init();
-	void initMap();
-	//void initMenu();
+	void initMapLayer();
+	void initMenuLayer();
+
+	MapLayer* getMapLayer() { return _mapLayer; };
+	MenuLayer* getMenuLayer() { return _menuLayer; };
 	static Game* createScene();
 	CREATE_FUNC(Game);
-	void onEnter();
-	void onExit();
+	friend class GameController;
 
-	bool clickDown(Event *event);
-	void clickMove(Event *event);
-	void clickUp(Event *event);
 };
 
 
