@@ -3,9 +3,9 @@
 #define __GAME_CONTROLLER_H__
 
 /*作为接口接受信息并对GameScene做出改变*/
-#include"GameScene.h"
-#include "Architecture.h"
-#include "Player.h"
+#include"Scene/GameScene.h"
+#include "Data/Architecture.h"
+#include "Data/Player.h"
 #include"cocos2d.h"
 USING_NS_CC;
 using namespace std;

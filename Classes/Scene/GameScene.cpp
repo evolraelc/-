@@ -137,6 +137,7 @@ bool MenuLayer::init()
 		eventDispatcher->addEventListenerWithSceneGraphPriority
 		(listener->clone(), sprite);
 	}
+	return false;
 }
 
 bool MenuLayer::clickDownToChoose(Event *event)
@@ -154,6 +155,7 @@ bool MenuLayer::clickDownToChoose(Event *event)
 		_kind = target->getTag();
 		return true;
 	}
+	return false;
 }
 
 
