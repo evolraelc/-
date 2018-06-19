@@ -9,7 +9,7 @@ void Player::initPlayer(int inithp)
 	this->inithp = 100;
 };
 
- Player* Player::createWithSpriteFrameName(const char * SpriteFrameName, Arch *arch)
+ Player* Player::createWithSpriteFrameName(const char * SpriteFrameName)
 {
 	Player *sprite = new Player();
 	if (sprite && sprite->initWithSpriteFrameName(SpriteFrameName))
@@ -31,11 +31,10 @@ void Player::initPlayer(int inithp)
 	CC_SAFE_DELETE(sprite);
 	return nullptr;
 }
-void Player::BuildPlayer(Arch *arch)    //设置人物初始位置
+void Player::Birthplace(Arch *arch)    //设置人物初始位置
 {
 	this->setPosition(arch->getPosition() + cocos2d::Vec2(0, arch->getContentSize().height / 2));
 	this->setVisible(true);
-	this->scheduleUpdate;
 }
 
 void Player::setPlayerDead()           //设置人物死亡
@@ -50,19 +49,23 @@ bool Player::isDead()                 //判断人物是否死亡
 
 void Player::moveToPosition(cocos2d::Vec2 & position)
 {
-	cocos2d::Vec2  initPos = id->getPosition();
+	cocos2d::Vec2  initPos = this->getPosition();
 	float x = position.x - initPos.x;
 	float y = position.y - initPos.y;
 	vel.x = x / 10;
 	vel.y = y / 10;
-	id->setVisible(true);
-	id->scheduleUpdate();
+	this->setVisible(true);
+	this->unscheduleUpdate();
+	this->scheduleUpdate();
 
 }
 
 void Player::update(float dt)
 {
-	id->setPosition(cocos2d::Vec2(id->getPosition()+vel*dt));
+	this->setPosition(cocos2d::Vec2(this->getPosition()+vel*dt));
 	if (dt == 10.0f)
-		id->removeFromParent;
+	{
+		this->unscheduleUpdate();
+		this->removeFromParent();
+	}
 }

@@ -11,18 +11,22 @@ using namespace std;
 class Player : public cocos2d::Sprite
 {
 private:
-	Sprite* id = Sprite::create("soldier.png");
+	Sprite* soldier ;
+	Sprite* tank;
 	CC_SYNTHESIZE(int, inithp, _inithp);       //初始血量
 	CC_SYNTHESIZE(int, hp, _hp);               //现在血量
-	CC_SYNTHESIZE(float, vel, _vel);           //初始速度
+	CC_SYNTHESIZE(cocos2d::Vec2, vel, _vel);           //初始速度
 	bool  _isDead = false;                     //玩家是否死亡
 	bool _alreadyDead = false;                 //玩家是否真正的死亡
 public:
-	Player();
+	Player()
+	{
 
-	Player(int inithp);
+	};
 
-	static Player* createWithSpriteFrameName(const char * SpriteFrameName);
+	void initPlayer(int inithp);
+
+    static Player* createWithSpriteFrameName(const char * SpriteFrameName);
 	
 	void Birthplace(Arch *arch);    //设置人物初始位置
 
@@ -31,9 +35,9 @@ public:
 	bool isDead();                 //判断人物是否死亡
 	
 
-	void moveToPosition(cocos2d::Vec2 & position);
+    void moveToPosition(cocos2d::Vec2 & position);
 
-     virtual void update(float dt);
+    virtual void update(float dt);
 
 };
 

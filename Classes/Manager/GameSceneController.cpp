@@ -1,5 +1,8 @@
 #include"GameSceneController.h"
-
+#include "Architecture.h"
+#include "Player.h"
+#include"cocos2d.h"
+USING_NS_CC;
 
 bool GameController::locationInit()
 {
@@ -53,10 +56,45 @@ void GameController::clickToBuild(Event *event)
 
 	if (this->_gameScene->_menuLayer->_isChosen)
 	{
-		if (canBuilding())
+		if (this->canBuilding())
 		{
-			addBuilding();
+			this->addBuilding(this->_gameScene->_menuLayer->convertToNodeSpace
+			(eventMouse->getLocation()));
 			this->_gameScene->_menuLayer->_isChosen = false;
 		}
 	}
+}
+
+void GameController::clickToRun(Event *event)
+{
+	auto eventMouse = static_cast<EventMouse*>(event);
+	auto target = static_cast<Sprite*>(eventMouse->getCurrentTarget());
+
+	if (this->_gameScene->_menuLayer->_isChosen)
+	{
+		if (this->canMan())
+		{
+			this->addMan(this->_gameScene->_menuLayer->convertToNodeSpace
+			(eventMouse->getLocation()));
+			this->_gameScene->_menuLayer->_isChosen = false;
+		}
+	}
+}
+bool canMan()
+{
+	return true;
+}
+
+void GameController::addMan(cocos2d::Vec2& Pos)
+{
+
+}
+
+bool canBuilding()
+{
+	return true;
+}
+void GameController::addBuilding(cocos2d::Vec2& Pos)
+{
+   
 }
