@@ -117,7 +117,7 @@ bool MenuLayer::init()
 	_kind = 0;
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
-
+	 
 	auto yellow = Sprite::create("yellow.png");
 	yellow->setAnchorPoint(Vec2(1, 0.5));
 	yellow->setPosition(Vec2(visibleSize.width, 0.5*visibleSize.height));

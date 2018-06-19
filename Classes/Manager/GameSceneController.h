@@ -3,7 +3,9 @@
 #define __GAME_CONTROLLER_H__
 
 /*作为接口接受信息并对GameScene做出改变*/
-#include"Scene/GameScene.h"
+#include"GameScene.h"
+#include "Architecture.h"
+#include "Player.h"
 #include"cocos2d.h"
 USING_NS_CC;
 using namespace std;
@@ -12,16 +14,15 @@ class GameController :public Node
 {
 private:
 	Game * _gameScene;
-	Player* _player;
+	Player * _player;
 public:
 	bool locationInit();
 	bool remoteInit();
 
 	bool canBuilding();
-	bool addBuilding();
+	void addBuilding(cocos2d::Vec2& Pos);
 	bool canMan();
-	bool addMan();
-
+	void addMan(cocos2d::Vec2& Pos);
 	bool clickToChoose(Event *event);
 	void clickToBuild(Event *event);
 	void clickToRun(Event *event);
