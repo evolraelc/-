@@ -1,6 +1,6 @@
 #include"GameSceneController.h"
-#include "Architecture.h"
-#include "Player.h"
+#include "Data/Architecture.h"
+#include "Data/Player.h"
 #include"cocos2d.h"
 USING_NS_CC;
 
@@ -47,6 +47,7 @@ bool GameController::clickToChoose(Event *event)
 		this->_gameScene->_menuLayer->_kind = target->getTag();
 		return true;
 	}
+	return false;
 }
 
 void GameController::clickToBuild(Event *event)
