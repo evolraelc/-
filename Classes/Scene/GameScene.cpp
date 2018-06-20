@@ -1,7 +1,6 @@
 #include "GameScene.h"
 #include"ui/CocosGUI.h"
 USING_NS_CC;
-
 //MapLayer的函数定义
 
 
@@ -127,7 +126,7 @@ bool MenuLayer::init()
 	auto listener = EventListenerMouse::create();
 	listener->onMouseDown = CC_CALLBACK_1(MenuLayer::clickDownToChoose, this);
 
-	for (int i = 0; i <= ITEM_AMOUNT; i++)
+	/*for (int i = 0; i <= ITEM_AMOUNT; i++)
 	{
 		auto sprite = Sprite::create(imageAdress[i]);
 		sprite->setAnchorPoint(Vec2(1, 0.5));
@@ -136,8 +135,13 @@ bool MenuLayer::init()
 		this->addChild(sprite, 0, spriteTag[i]);
 		eventDispatcher->addEventListenerWithSceneGraphPriority
 		(listener->clone(), sprite);
-	}
-	return false;
+	}*/
+	auto sprite1 = Sprite::create("basement.png");
+	sprite1->setAnchorPoint(Vec2(1, 0.5));
+	sprite1->setPosition(origin + Vec2(visibleSize.width, 0.5*visibleSize.height));
+	this->addChild(sprite1, 0, 1);
+	eventDispatcher->addEventListenerWithSceneGraphPriority
+	(listener->clone(), sprite1);
 }
 
 bool MenuLayer::clickDownToChoose(Event *event)
@@ -155,11 +159,14 @@ bool MenuLayer::clickDownToChoose(Event *event)
 		_kind = target->getTag();
 		return true;
 	}
-	return false;
 }
 
 
 //Game函数定义
+Game* Game::createScene()
+{
+	return Game::create();
+}
 
 bool Game::init()
 {
@@ -191,10 +198,7 @@ void Game::initMenuLayer()
 	this->addChild(_menuLayer,1);
 }
 
-Game* Game::createScene()
-{
-	return Game::create();
-}
+
 
 
 

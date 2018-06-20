@@ -1,6 +1,6 @@
 #include"GameSceneController.h"
-#include "Data/Architecture.h"
-#include "Data/Player.h"
+#include "Architecture.h"
+#include "Player.h"
 #include"cocos2d.h"
 USING_NS_CC;
 
@@ -47,7 +47,6 @@ bool GameController::clickToChoose(Event *event)
 		this->_gameScene->_menuLayer->_kind = target->getTag();
 		return true;
 	}
-	return false;
 }
 
 void GameController::clickToBuild(Event *event)
@@ -81,7 +80,7 @@ void GameController::clickToRun(Event *event)
 		}
 	}
 }
-bool canMan()
+bool GameController::canMan()
 {
 	return true;
 }
@@ -91,7 +90,7 @@ void GameController::addMan(cocos2d::Vec2& Pos)
 
 }
 
-bool canBuilding()
+bool GameController::canBuilding()
 {
 	return true;
 }

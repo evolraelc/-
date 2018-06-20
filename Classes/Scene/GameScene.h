@@ -7,17 +7,25 @@ USING_NS_CC;
 using namespace std;
 enum
 {
-	ITEM_AMOUNT = 0
+	ITEM_AMOUNT = 5
 };
 enum
 {
 	MAP_LAYER_TAG,
 	MENU_LAYER_TAG
 };
-const int spriteTag[ITEM_AMOUNT + 1]{ 0 };
-const string imageAdress[ITEM_AMOUNT + 1]
+const int spriteTag[ITEM_AMOUNT]=
 {
-	"test.png"
+	1,2,3,4,5
+};
+const string imageAdress[ITEM_AMOUNT]
+{
+	"basement.png",
+"powerplant.png",
+"minefield,png",
+"barracks.png",
+"warfactory.png"
+
 };
 /*这个场景为游戏场景，分为三层：地图，菜单层，文本层*/
 class GameController;
@@ -28,7 +36,6 @@ class MapLayer :public Layer
 private:
 	TMXTiledMap * _map;
 	TMXLayer * _collidable;
-
 	bool _isDrag;			//鼠标是否在拖动
 	Vec2 _posBeginDrag;
 public:
