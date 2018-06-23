@@ -12,7 +12,6 @@ public:
 	virtual bool init();
 
 	//  selector callbacks
-	void menuHelpIsOkCallback(cocos2d::Ref* pSender);
 	CREATE_FUNC(Help);
 };
 

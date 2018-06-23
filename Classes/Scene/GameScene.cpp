@@ -101,6 +101,7 @@ void MapLayer::onExit()
 
 
 
+
 //MEnuLayer函数定义
 bool MenuLayer::init()
 {
@@ -109,7 +110,9 @@ bool MenuLayer::init()
 		return false;
 	}
 	_isChosen = false;
+	_isAdding = false;
 	_kind = 0;
+
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 	 
@@ -123,7 +126,8 @@ bool MenuLayer::init()
 		auto item = MenuItemImage::create(imageAdress[i - 1], imageAdress[i - 1], imageAdress[i - 1],
 			[&](Ref *pSender) 
 		{_isChosen = true;
-		_kind = i; });
+		_kind = this->getTag();
+		if (_kind == zaobing || _kind == zaoche) { _isAdding = true; }; });
 
 		item->setPosition(Vec2(visibleSize.width-25, visibleSize.height*(i+1) / 10));
 		this->addChild(item, 1, i);										//点击造兵键功能未完善
@@ -171,6 +175,15 @@ void Game::initMenuLayer()
 	this->addChild(_menuLayer,1);
 }
 
+Game* Game::create()
+{
+	Game* game=new Game();
+	if (!game->init())
+	{
+		return nullptr;
+	}
+	return game;
+}
 
 
 

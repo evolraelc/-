@@ -2,6 +2,7 @@
 #include "MenuScene.h"
 #include "HelpScene.h"
 #include "GameScene.h"
+#include"Manager/GameSceneController.h"
 USING_NS_CC;
 
 Scene* Menu_S::createScene()
@@ -35,7 +36,7 @@ bool Menu_S::init()
 
 	auto item1 = MenuItemFont::create("Start", CC_CALLBACK_1(Menu_S::menuStartCallback, this));
 	auto item2 = MenuItemFont::create("Help", CC_CALLBACK_1(Menu_S::menuHelpCallback, this)); 
-	auto item3= MenuItemFont::create("Back", CC_CALLBACK_1(Menu_S::menuGetCallback, this));
+	auto item3= MenuItemFont::create("Back", [&](Ref* pSender) { Director::getInstance()->popScene(); });
 	Menu *mm = Menu::create(item1, item2,item3,NULL);
 	mm->alignItemsVertically();
 	this->addChild(mm);
@@ -50,8 +51,8 @@ void Menu_S::menuGetCallback(cocos2d::Ref* pSender)
 
 void Menu_S::menuStartCallback(cocos2d::Ref* pSender)
 {
-	auto st = Game::createScene();
-	Director::getInstance()->pushScene(st);
+	auto gc = GameController::create();
+	Director::getInstance()->pushScene(gc->getGameScene());
 }
 
 void Menu_S::menuHelpCallback(cocos2d::Ref* pSender)
