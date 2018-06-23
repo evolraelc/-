@@ -1,7 +1,7 @@
 #include"CreateRoom.h"
 #include "ui/CocosGUI.h"
 #include"cocos2d.h"
-#include<iostream>;
+#include<iostream>
 
 using namespace std;
 using namespace cocos2d::ui;
@@ -29,7 +29,7 @@ bool CreateRoom::init()
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
 	Sprite *bg = Sprite::create("Menu.png");
-	bg->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2));
+	bg->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2));
 	this->addChild(bg);
 
 	auto textField = TextField::create("", "Arial", 30);
@@ -41,7 +41,7 @@ bool CreateRoom::init()
 	auto item = MenuItemFont::create("Back",
 		[&](Ref* pSender) {Director::getInstance()->popScene(); });
 
-	item->setPosition(Vec2(0.8*visibleSize.width, 0.8*visibleSize.height) );
+	item->setPosition(Vec2(0.8*visibleSize.width, 0.2*visibleSize.height) );
 	Menu *mm = Menu::create(item, NULL);
 	this->addChild(mm);
 
@@ -50,8 +50,4 @@ bool CreateRoom::init()
 	return true;
 }
 
-void CreateRoom::menuGetCallback(cocos2d::Ref* pSender)
-{
-	Director::getInstance()->popScene();
-}
 
