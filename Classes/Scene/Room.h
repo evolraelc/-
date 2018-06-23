@@ -14,7 +14,7 @@ public:
 	// a selector callback
 
 	// implement the "static create()" method manually
-	CREATE_FUNC(CreateRoom);
-};
+	CREATE_FUNC(Room);
+}
 
 #endif // !__ROOM_H__

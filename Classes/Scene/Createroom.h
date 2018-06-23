@@ -4,18 +4,13 @@
 
 #include "cocos2d.h"
 
-
-class CreateRoom : public cocos2d::Scene
+; class CreateRoom : public cocos2d::Scene
 {
 public:
 	static cocos2d::Scene* createScene();
 
 	virtual bool init();
 
-	// a selector callback
-	void menuGetCallback(cocos2d::Ref* pSender);
-
-	// implement the "static create()" method manually
 	CREATE_FUNC(CreateRoom);
 };
 #endif // !__CREATEROOM_H__

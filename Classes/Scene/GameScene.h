@@ -5,26 +5,31 @@
 #include"ui/CocosGUI.h"
 USING_NS_CC;
 using namespace std;
-enum
-{
-	ITEM_AMOUNT = 5
-};
+const int  ITEM_AMOUNT = 7;
 enum
 {
 	MAP_LAYER_TAG,
 	MENU_LAYER_TAG
 };
-const int spriteTag[ITEM_AMOUNT]=
+enum ITEM_TAG
 {
-	1,2,3,4,5
+	basement = 1,
+	dianchang,
+	kuangchang,
+	bingying,
+	chechang,
+	zaobing,
+	zaoche,
 };
 const string imageAdress[ITEM_AMOUNT]
 {
-	"basement.png",
-"powerplant.png",
-"minefield,png",
-"barracks.png",
-"warfactory.png"
+"Item_basement.png",
+"Item_dianchang.png",
+"Item_kuangchang.png",
+"Item_bingying.png",
+"Item_chechang.png",
+"Item_zaobing.png",
+"Item_zaoche.png"
 
 };
 /*这个场景为游戏场景，分为三层：地图，菜单层，文本层*/
@@ -64,8 +69,6 @@ public:
 	bool init();
 	bool getIsChosen() { return _isChosen; };
 	void setIsChosen(bool a) { _isChosen = a; };
-	bool clickDownToChoose(Event* event);
-
 	
 	CREATE_FUNC(MenuLayer);
 	friend class Game;

@@ -24,35 +24,19 @@ bool JoinRoom::init()
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
 	Sprite *bg = Sprite::create("Menu.png");
-	bg->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2));
+	bg->setPosition(Vec2( visibleSize.width / 2, visibleSize.height / 2));
 	this->addChild(bg);
 
 	MenuItemFont::setFontName("Marker Felt");
 	MenuItemFont::setFontSize(60);
 
-	auto item1 = MenuItemFont::create("Start", CC_CALLBACK_1(JoinRoom::menuStartCallback, this));
-	auto item2 = MenuItemFont::create("Help", CC_CALLBACK_1(JoinRoom::menuHelpCallback, this));
-	auto item3 = MenuItemFont::create("Back", CC_CALLBACK_1(JoinRoom::menuGetCallback, this));
-	Menu *mm = Menu::create(item1, item2, item3, NULL);
+	auto item = MenuItemFont::create("Back",
+		[&](Ref* pSender) {Director::getInstance()->popScene(); });
+	item->setPosition(Vec2(0.8*visibleSize.width, 0.2*visibleSize.height));
+
+	Menu *mm = Menu::create(item, NULL);
 	mm->alignItemsVertically();
 	this->addChild(mm);
 
 	return true;
-}
-
-void JoinRoom::menuGetCallback(cocos2d::Ref* pSender)
-{
-	Director::getInstance()->popScene();
-}
-
-void JoinRoom::menuStartCallback(cocos2d::Ref* pSender)
-{
-	auto st = Game::createScene();
-	Director::getInstance()->pushScene(st);
-}
-
-void JoinRoom::menuHelpCallback(cocos2d::Ref* pSender)
-{
-	auto he = Help::createScene();
-	Director::getInstance()->pushScene(he);
 }

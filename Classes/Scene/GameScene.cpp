@@ -36,7 +36,7 @@ bool MapLayer::clickDownToDrag(Event *event)
 	_posBeginDrag = this->convertToNodeSpace(eventMouse->getLocation());
 	return true;
 
-	/*if (rect.containsPoint(locationInNode))
+	/*if (rect.containsPoint(locationInNode))尝试加一步判断，失败！
 	{
 		_isDrag = true;
 		_posBeginDrag = this->convertToNodeSpace(eventMouse->getLocation());
@@ -61,7 +61,7 @@ void MapLayer::clickMoveToDrag(Event *event)
 	{
 		/*
 		if (tempLocation.x > 0) { tempLocation.x = 0; }
-		if (tempLocation.x < visibleSize.width- mapSize.width) { tempLocation.x = visibleSize.width - mapSize.width; }
+		if (tempLocation.x < visibleSize.width- mapSize.width) { tempLocation.x = visibleSize.width - mapSize.width; }尝试防止拉出界，失败！
 		if (tempLocation.y > 0) { tempLocation.y = 0; }
 		if (tempLocation.y < visibleSize.height - mapSize.height) { tempLocation.y = visibleSize.height - mapSize.height; }
 		*/
@@ -76,10 +76,6 @@ void MapLayer::clickUpToDrag(Event *event)
 	auto eventMouse = static_cast<EventMouse*>(event);
 	auto target = static_cast<Layer*>(event->getCurrentTarget());
 
-	/*Vec2 lacationInNode = target->convertToNodeSpace(eventMouse->getLocation());
-	Size s = target->getContentSize();
-	Rect rect = Rect(0, 0, s.width, s.height);
-	*/
 	_isDrag = false;
 }
 
@@ -122,44 +118,21 @@ bool MenuLayer::init()
 	yellow->setPosition(Vec2(visibleSize.width, 0.5*visibleSize.height));
 	this->addChild(yellow);
 
-	EventDispatcher *eventDispatcher = Director::getInstance()->getEventDispatcher();
-	auto listener = EventListenerMouse::create();
-	listener->onMouseDown = CC_CALLBACK_1(MenuLayer::clickDownToChoose, this);
-
-	/*for (int i = 0; i <= ITEM_AMOUNT; i++)
+	for (int i = 1; i <= ITEM_AMOUNT ;++i)
 	{
-		auto sprite = Sprite::create(imageAdress[i]);
-		sprite->setAnchorPoint(Vec2(1, 0.5));
-		sprite->setPosition(origin + Vec2(visibleSize.width, 0.5*visibleSize.height));
+		auto item = MenuItemImage::create(imageAdress[i - 1], imageAdress[i - 1], imageAdress[i - 1],
+			[&](Ref *pSender) 
+		{_isChosen = true;
+		_kind = i; });
 
-		this->addChild(sprite, 0, spriteTag[i]);
-		eventDispatcher->addEventListenerWithSceneGraphPriority
-		(listener->clone(), sprite);
-	}*/
-	auto sprite1 = Sprite::create("basement.png");
-	sprite1->setAnchorPoint(Vec2(1, 0.5));
-	sprite1->setPosition(origin + Vec2(visibleSize.width, 0.5*visibleSize.height));
-	this->addChild(sprite1, 0, 1);
-	eventDispatcher->addEventListenerWithSceneGraphPriority
-	(listener->clone(), sprite1);
-}
-
-bool MenuLayer::clickDownToChoose(Event *event)
-{
-	auto eventMouse = static_cast<EventMouse*>(event);
-	auto target = static_cast<Sprite*>(eventMouse->getCurrentTarget());
-	
-	Vec2 locationInNode = target->convertToNodeSpace(eventMouse->getLocation());
-	Size s = target->getContentSize();
-	Rect rect = Rect(0, 0, s.width, s.height);
-
-	if (rect.containsPoint(locationInNode))
-	{
-		_isChosen= true;
-		_kind = target->getTag();
-		return true;
+		item->setPosition(Vec2(visibleSize.width-25, visibleSize.height*(i+1) / 10));
+		this->addChild(item, 1, i);										//点击造兵键功能未完善
 	}
+
+	return true;
+
 }
+
 
 
 //Game函数定义
