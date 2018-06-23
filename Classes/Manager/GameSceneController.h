@@ -16,19 +16,21 @@ private:
 	Game * _gameScene;
 	Player * _player;
 public:
-	bool locationInit();
+	bool init();
 	bool remoteInit();
+	static GameController*  create();
 
 	bool canBuilding();
 	void addBuilding(cocos2d::Vec2& Pos);
+	bool canAddMan();
 	bool canMan();
 	void addMan(cocos2d::Vec2& Pos);
 	void clickToBuild(Event *event);
+	void clickToAddMan(Event *event);
 	void clickToRun(Event *event);
 
 	Game* getGameScene() { return _gameScene; }
 
-	CREATE_FUNC(GameController);
 };
 
 #endif // !__GAME_CONTROLLER_H__
