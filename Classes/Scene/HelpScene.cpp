@@ -23,22 +23,15 @@ bool Help::init()
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
-	Sprite *bg = Sprite::create("Menu.png");
-	bg->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2));
+	Sprite *bg = Sprite::create("help.png");
+	bg->setPosition(Vec2( visibleSize.width / 2, visibleSize.height / 2));
 	this->addChild(bg);
 
 	MenuItemFont::setFontName("Marker Felt");
 	MenuItemFont::setFontSize(30);
 
-	auto item = MenuItemFont::create("Back", CC_CALLBACK_1(Help::menuHelpIsOkCallback, this));
-	Menu *mm2 = Menu::create(item, NULL);
-	item->setPosition(200, -100);
-	this->addChild(mm2);
+	auto item = MenuItemFont::create("Back",  [&](Ref* pSender) { Director::getInstance()->popScene(); } );
+	item->setPosition(Vec2(0.8*visibleSize.width, 0.2*visibleSize.height));
+	this->addChild(item);
 	return true;
-}
-
-
-void Help::menuHelpIsOkCallback(cocos2d::Ref* pSender)
-{
-	Director::getInstance()->popScene();
 }

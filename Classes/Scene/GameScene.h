@@ -65,6 +65,8 @@ private:
 	bool _isChosen;
 	int _kind;
 
+	bool _isAdding;
+
 public:
 	bool init();
 	bool getIsChosen() { return _isChosen; };
@@ -91,11 +93,11 @@ public:
 	virtual bool init();
 	void initMapLayer();
 	void initMenuLayer();
+	static Game* Game::create();
 
 	MapLayer* getMapLayer() { return _mapLayer; };
 	MenuLayer* getMenuLayer() { return _menuLayer; };
 	static Game* createScene();
-	CREATE_FUNC(Game);
 	friend class GameController;
 
 };

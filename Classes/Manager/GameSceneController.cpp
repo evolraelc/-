@@ -4,7 +4,7 @@
 #include"cocos2d.h"
 USING_NS_CC;
 
-bool GameController::locationInit()
+bool GameController::init()
 {
 	if (!Node::init())
 	{
@@ -14,18 +14,37 @@ bool GameController::locationInit()
 	{
 		_gameScene = Game::create(); 
 
+
 		EventDispatcher *eventDispatcher = Director::getInstance()->getEventDispatcher();
 
-		auto listener = EventListenerMouse::create();
-		listener->onMouseDown = CC_CALLBACK_1(GameController::clickToBuild, this);//¼àÌýµØÍ¼²ã
+		auto listener1 = EventListenerMouse::create();
+		listener1->onMouseDown = CC_CALLBACK_1(GameController::clickToBuild, this);//¼àÌýµØÍ¼²ã
 		eventDispatcher->addEventListenerWithSceneGraphPriority
-		(listener, _gameScene->getMapLayer());
+		(listener1, _gameScene->getMapLayer());
+
+		auto listener2 = EventListenerMouse::create();
+		listener2->onMouseDown = CC_CALLBACK_1(GameController::clickToAddMan, this);//¼àÌýµØÍ¼²ã
+		eventDispatcher->addEventListenerWithSceneGraphPriority
+		(listener2, _gameScene->getMapLayer());
 
 
 		return true;
 	}
 }
 
+GameController* GameController::create()
+{
+	auto gameController = new GameController();
+	if (gameController)
+	{
+		gameController->init();
+		return gameController;
+	}
+	else
+	{
+		return nullptr;
+	}
+}
 
 void GameController::clickToBuild(Event *event)
 {
@@ -43,6 +62,19 @@ void GameController::clickToBuild(Event *event)
 	}
 }
 
+void GameController::clickToAddMan(Event *event)
+{
+	auto eventMouse = static_cast<EventMouse*>(event);
+	auto target = static_cast<Sprite*>(eventMouse->getCurrentTarget());
+	if (this->_gameScene->_menuLayer->_isAdding)
+	{
+		this->_gameScene->_menuLayer->_isAdding = false;
+		if (this->canAddMan())
+		{
+			this->addMan(Vec2(0,0));
+		}
+	}
+}
 void GameController::clickToRun(Event *event)
 {
 	auto eventMouse = static_cast<EventMouse*>(event);
@@ -62,7 +94,10 @@ bool GameController::canMan()
 {
 	return true;
 }
-
+bool GameController::canAddMan()
+{
+	return true;
+}
 void GameController::addMan(cocos2d::Vec2& Pos)
 {
 
