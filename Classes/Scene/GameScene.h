@@ -5,7 +5,7 @@
 #include"ui/CocosGUI.h"
 USING_NS_CC;
 using namespace std;
-const int  ITEM_AMOUNT = 7;
+const int  ITEM_AMOUNT = 8;
 enum
 {
 	MAP_LAYER_TAG,
@@ -29,7 +29,8 @@ const string imageAdress[ITEM_AMOUNT]
 "barracks.png",
 "warfactory.png",
 "Item_zaobing.png",
-"Item_zaoche.png"
+"Item_zaoche.png",
+"Item_dog.png"
 
 };
 /*这个场景为游戏场景，分为三层：地图，菜单层，文本层*/

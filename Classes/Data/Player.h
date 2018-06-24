@@ -43,7 +43,7 @@ public:
 
 	bool getAttack();
 
-	void getRealAttack();
+	void getRealAttack(int number);
 
 	void DoAttack();
 

@@ -50,6 +50,11 @@ bool Player::init()
 		 inithp = hp = 200;
 		 attack = 50;
 	 }
+	 else if (number == 3) {
+		 auto tank = Sprite::create("dog.png");
+		 inithp = hp = 50;
+		 attack = 20;
+	 }
    
  
  
@@ -93,5 +98,23 @@ void Player::update(float dt)
 	{
 		this->unscheduleUpdate();
 		this->removeFromParent();
+	}
+}
+
+
+
+void Player::getRealAttack(int number)
+{
+	if (number == 1)
+	{
+		this->hp = hp - 30;
+	}
+	else if (number == 2)
+	{
+		this->hp = hp - 50;
+	}
+	else if (number == 3)
+	{
+		this->hp = hp - 20;
 	}
 }

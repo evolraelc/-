@@ -113,6 +113,7 @@ void GameController::addMan(cocos2d::Vec2& Pos,int kind)
 {
 	Sprite *soldier= Sprite::create("soldier.png");
 	Sprite *tank = Sprite::create("tank.png");
+	Sprite *dog = Sprite::create("dog.png");
 	if (kind == 6)
 	{
 		soldier->setPosition(Pos);
@@ -122,6 +123,11 @@ void GameController::addMan(cocos2d::Vec2& Pos,int kind)
 	{
 		tank->setPosition(Pos);
 		this->_gameScene->_mapLayer->addChild(tank);
+	}
+	else if (kind == 8)
+	{
+		tank->setPosition(Pos);
+		this->_gameScene->_mapLayer->addChild(dog);
 	}
 	
 }
