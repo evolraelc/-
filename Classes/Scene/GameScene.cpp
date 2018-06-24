@@ -124,12 +124,10 @@ bool MenuLayer::init()
 	for (int i = 1; i <= ITEM_AMOUNT ;++i)
 	{
 		auto item = MenuItemImage::create(imageAdress[i - 1], imageAdress[i - 1], imageAdress[i - 1],
-			[&](Ref *pSender) 
-		{_isChosen = true;
-		_kind = this->getTag();
-		if (_kind == zaobing || _kind == zaoche) { _isAdding = true; }; });
+			CC_CALLBACK_1(MenuLayer::callBack, this));
 
 		item->setPosition(Vec2(visibleSize.width-25, visibleSize.height*(i+1) / 10));
+		item->setScaleY(0.80);
 		this->addChild(item, 1, i);										//点击造兵键功能未完善
 	}
 
@@ -137,7 +135,12 @@ bool MenuLayer::init()
 
 }
 
-
+void MenuLayer::callBack(Ref* pSender)
+{
+	_isChosen = true;
+	_kind = this->getTag();
+if (_kind == zaobing || _kind == zaoche) { _isAdding = true; };
+}
 
 //Game函数定义
 Game* Game::createScene()

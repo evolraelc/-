@@ -9,22 +9,22 @@
 #include"cocos2d.h"
 USING_NS_CC;
 using namespace std;
-
 class GameController :public Node
 {
 private:
 	Game * _gameScene;
 	Player * _player;
+	string *buildings[7];
 public:
 	bool init();
-	bool remoteInit();
 	static GameController*  create();
 
 	bool canBuilding();
-	void addBuilding(cocos2d::Vec2& Pos);
+	void addBuilding(cocos2d::Vec2& Pos,int kind);
 	bool canAddMan();
 	bool canMan();
-	void addMan(cocos2d::Vec2& Pos);
+	void playerMove(cocos2d::Vec2& Pos);
+	void addMan(cocos2d::Vec2& Pos,int kind);
 	void clickToBuild(Event *event);
 	void clickToAddMan(Event *event);
 	void clickToRun(Event *event);

@@ -84,7 +84,7 @@ bool HelloWorld::init()
 		problemLoading("'Enter.png' and 'Enter.png'");
 	}
 	else
-		closeItem2->setPosition(Vec2(250, 70));
+		closeItem2->setPosition(Vec2(240, 70));
 
 
 

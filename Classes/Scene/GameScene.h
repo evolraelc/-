@@ -23,11 +23,11 @@ enum ITEM_TAG
 };
 const string imageAdress[ITEM_AMOUNT]
 {
-"Item_basement.png",
-"Item_dianchang.png",
-"Item_kuangchang.png",
-"Item_bingying.png",
-"Item_chechang.png",
+"basement.png",
+"powerplant.png",
+"minefield.png",
+"barracks.png",
+"warfactory.png",
 "Item_zaobing.png",
 "Item_zaoche.png"
 
@@ -71,6 +71,7 @@ public:
 	bool init();
 	bool getIsChosen() { return _isChosen; };
 	void setIsChosen(bool a) { _isChosen = a; };
+	void callBack(Ref* pSender);
 	
 	CREATE_FUNC(MenuLayer);
 	friend class Game;

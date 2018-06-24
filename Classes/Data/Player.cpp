@@ -4,17 +4,22 @@
 #include<iostream>
 using namespace std;
 
-void Player::initPlayer(int inithp)
+bool Player::init()
 {
-	this->inithp = 100;
-};
+	if (!Sprite::init())
+	{
+		return false;
+	}
+	return true;
+}
 
- Player* Player::createWithSpriteFrameName(const char * SpriteFrameName)
+ Player* Player::createPlayer(int number)
 {
 	Player *sprite = new Player();
-	if (sprite && sprite->initWithSpriteFrameName(SpriteFrameName))
+	if (sprite && sprite->init())
 	{
 		sprite->autorelease();
+		sprite->playerinit(number);
 		/*			sprite->setVisible(false);
 
 		auto body = PhysicsBody::createBox(sprite->getContentSize());
@@ -31,6 +36,27 @@ void Player::initPlayer(int inithp)
 	CC_SAFE_DELETE(sprite);
 	return nullptr;
 }
+
+ void Player::playerinit(int number)
+ {
+	 this->number = number;
+	 if (number == 1) {
+		 auto soldier = Sprite::create("soldier.png");
+		 inithp = hp = 100;
+		 attack = 30;
+	 }
+	 else if (number == 2) {
+		 auto tank = Sprite::create("tank.png");
+		 inithp = hp = 200;
+		 attack = 50;
+	 }
+   
+ 
+ 
+ 
+ 
+ }
+
 void Player::Birthplace(Arch *arch)    //设置人物初始位置
 {
 	this->setPosition(arch->getPosition() + cocos2d::Vec2(0, arch->getContentSize().height / 2));

@@ -5,11 +5,6 @@
 #include<string>
 #include<iostream>
 using namespace std;
-#define _basement "basement.png"
-#define _powerplant "powerplant.png"
-#define _minefield "minefield,png"
-#define _barracks "barracks.png"
-#define _warfactory "warfactory.png"
 
 class Arch :public cocos2d::Sprite
 {
@@ -18,44 +13,54 @@ private:
 	CC_SYNTHESIZE(int, hp, _hp);               //现在血量
 	bool  _isDead = false;                     //基地是否爆炸
 	bool _alreadyDead = false;                 //基地是否真正的爆炸
+	int kind;
 public:
-	typedef enum
+
+	Arch() { inithp = 100; };
+	/*static Arch* create(const std::string& filename)
 	{
-		Basement,
-		Powerplant,
-		Minefield,
-		Barracks,
-		Warfactory,
-	}ArchTypes;
-	Arch();
-	Arch(int inithp)
-	{
-		this->inithp = 100;
-	}
-	static Arch* createWithArchTypes(ArchTypes archtypes)
-	{
-		Arch *sprite = new Arch(archtypes);
-		const char* ArchFrameName = _basement;
-		switch (archtypes)
+		Arch *sprite = new Arch();
+		if (sprite && sprite->initWithFile(filename))
 		{
-		case Basement:
-			ArchFrameName = _basement;
+			sprite->autorelease();
+			return sprite;
+		}
+		CC_SAFE_DELETE(sprite);
+		return nullptr;
+	}*/
+	static Arch* createWithArchTypes(cocos2d::Vec2& Pos, int kind)
+	{
+		Arch *sprite = new Arch();
+		Sprite *basement = Sprite::create("basement.png");
+		Sprite *powerplant = Sprite::create("powerplant,png");
+        Sprite *minefield = Sprite::create("minefield,png");
+        Sprite *barracks = Sprite::create("barracks.png");
+        Sprite *warfactory = Sprite::create("warfactory.png");
+		const char *ArchFrameName = "basement.png";
+		switch (kind)
+		{
+		case 1:
+			basement->setPosition(Pos);
 			sprite->inithp = 100;
 			break;
-		case Powerplant:
-			ArchFrameName = _powerplant;
-			sprite->inithp = 100;
-			break; 
-		case Minefield:
-			ArchFrameName = _minefield;
+		case 2:
+			
+			powerplant->setPosition(Pos);
 			sprite->inithp = 100;
 			break;
-		case Barracks:
-			ArchFrameName = _barracks;
+		case 3:
+			
+			minefield->setPosition(Pos);
 			sprite->inithp = 100;
 			break;
-		case Warfactory:
-			ArchFrameName = _warfactory;
+		case 4:
+			
+			barracks->setPosition(Pos);
+			sprite->inithp = 100;
+			break;
+		case 5:
+			
+			warfactory->setPosition(Pos);
 			sprite->inithp = 100;
 			break;
 		};
@@ -68,6 +73,7 @@ public:
 		CC_SAFE_DELETE(sprite);
 		return nullptr;
 	}
+
 	void setPlayerDead()           //设置阵营爆炸
 	{
 		_isDead = true;
