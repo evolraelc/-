@@ -82,7 +82,7 @@ void GameController::clickToRun(Event *event)
 {
 	auto eventMouse = static_cast<EventMouse*>(event);
 	auto target = static_cast<Sprite*>(eventMouse->getCurrentTarget());
-
+	                  
 	if (this->_gameScene->_menuLayer->_isChosen)
 	{
 		if (this->canMan())

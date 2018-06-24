@@ -31,7 +31,12 @@ bool Help::init()
 	MenuItemFont::setFontSize(30);
 
 	auto item = MenuItemFont::create("Back",  [&](Ref* pSender) { Director::getInstance()->popScene(); } );
-	item->setPosition(Vec2(0.8*visibleSize.width, 0.2*visibleSize.height));
-	this->addChild(item);
+	Menu *mm = Menu::create(item, NULL);
+	mm->setPosition(Vec2(0.8*visibleSize.width, 0.2*visibleSize.height));
+	this->addChild(mm);
 	return true;
+}
+void Help::menuHelpIsOkCallback(cocos2d::Ref* pSender)
+{
+	Director::getInstance()->popScene();
 }

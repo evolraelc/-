@@ -10,11 +10,10 @@ public:
 	static cocos2d::Scene* createScene();
 
 	virtual bool init();
-
+	void menuHelpIsOkCallback(cocos2d::Ref* pSender);
 	//  selector callbacks
 	CREATE_FUNC(Help);
 };
-
 
 
 #endif

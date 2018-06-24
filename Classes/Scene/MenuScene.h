@@ -14,6 +14,7 @@ public:
 	//  selector callbacks
     void menuHelpCallback(cocos2d::Ref* pSender);
 	void menuStartCallback(cocos2d::Ref* pSender);
+	void menuSettingCallback(cocos2d::Ref* pSender);
 	void menuGetCallback(cocos2d::Ref* pSender);
 	CREATE_FUNC(Menu_S);
 };

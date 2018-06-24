@@ -2,6 +2,7 @@
 #include "MenuScene.h"
 #include "HelpScene.h"
 #include "GameScene.h"
+#include "SettingScene.h"
 #include"Manager/GameSceneController.h"
 USING_NS_CC;
 
@@ -32,12 +33,13 @@ bool Menu_S::init()
 	this->addChild(bg);
 
 	MenuItemFont::setFontName("Marker Felt");
-	MenuItemFont::setFontSize(60);
+	MenuItemFont::setFontSize(40);
 
 	auto item1 = MenuItemFont::create("Start", CC_CALLBACK_1(Menu_S::menuStartCallback, this));
 	auto item2 = MenuItemFont::create("Help", CC_CALLBACK_1(Menu_S::menuHelpCallback, this)); 
-	auto item3= MenuItemFont::create("Back", [&](Ref* pSender) { Director::getInstance()->popScene(); });
-	Menu *mm = Menu::create(item1, item2,item3,NULL);
+	auto item3 = MenuItemFont::create("Settings", CC_CALLBACK_1(Menu_S::menuSettingCallback, this));
+	auto item4= MenuItemFont::create("Back", [&](Ref* pSender) { Director::getInstance()->popScene(); });
+	Menu *mm = Menu::create(item1, item2,item3,item4,NULL);
 	mm->alignItemsVertically();
 	this->addChild(mm);
 
@@ -54,6 +56,13 @@ void Menu_S::menuStartCallback(cocos2d::Ref* pSender)
 	auto gc = GameController::create();
 	Director::getInstance()->pushScene(gc->getGameScene());
 }
+
+void Menu_S::menuSettingCallback(cocos2d::Ref* pSender)
+{
+	auto gc =Setting::createScene();
+	Director::getInstance()->pushScene(gc);
+}
+
 
 void Menu_S::menuHelpCallback(cocos2d::Ref* pSender)
 {
