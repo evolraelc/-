@@ -26,7 +26,9 @@
 #define  _APP_DELEGATE_H_
 
 #include "cocos2d.h"
-
+#include "Scene/HelloWorldScene.h"
+#include "SimpleAudioEngine.h"
+using namespace CocosDenshion;
 /**
 @brief    The cocos2d Application.
 
