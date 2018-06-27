@@ -12,9 +12,14 @@ using namespace std;
 class GameController :public Node
 {
 private:
+	EventListenerTouchOneByOne* _touchListener;
+	Animate *_runAnim, *_standAnim;
+	Sprite* _enemy;
+	float ENEMY_MOVE_SPEED;
 	Game * _gameScene;
 	Player * _player;
 	string *buildings[7];
+	bool _yes;
 public:
 	bool init();
 	static GameController*  create();
@@ -23,12 +28,13 @@ public:
 	void addBuilding(cocos2d::Vec2& Pos,int kind);
 	bool canAddMan();
 	bool canMan();
-	void playerMove(cocos2d::Vec2& Pos);
-	void addMan(cocos2d::Vec2& Pos,int kind);
 	void clickToBuild(Event *event);
-	void clickToAddMan(Event *event);
-	void clickToRun(Event *event);
-
+	bool onTouchBegan( Event *event);
+	void update(float dt);
+	void initEnemy(cocos2d::Vec2& Pos);
+	void runAndStand(const Vec2& pos);
+	void add(EventKeyboard::KeyCode code, Event *event);
+//	void enemy_miss();
 	Game* getGameScene() { return _gameScene; }
 
 };

@@ -13,80 +13,64 @@ bool MapLayer::init()
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
+	
 	_map = TMXTiledMap::create("tiled_map.tmx");
 	_map->setAnchorPoint(Vec2::ZERO);
 	_map->setPosition(Vec2::ZERO);
 	this->addChild(_map);
-
+   
 	_collidable = _map->getLayer("water");
-	_collidable->setVisible(true);
-
+	_collidable->setVisible(true); 
+	Sprite* _boss = Sprite::create("soldier.png");
+	_boss->setPosition(600,300);
+	_boss->setTag(100);
+	this->addChild(_boss);
 	return true;
 }
 
-bool MapLayer::clickDownToDrag(Event *event)
+void MapLayer::move(EventKeyboard::KeyCode code, Event *event)
 {
-	auto eventMouse = static_cast<EventMouse*>(event);
+	auto eventMouse = static_cast<EventKeyboard*>(event);
 	auto target = static_cast<Layer*>(eventMouse->getCurrentTarget());
-	/*Size s = target->getContentSize();
-	Rect rect = Rect(0, 0, s.width, s.height);*/
-	
 
-	_isDrag = true;
-	_posBeginDrag = this->convertToNodeSpace(eventMouse->getLocation());
-	return true;
+	auto nowPosition = target->getPosition();
+	auto tempPosition = nowPosition;
+	float mapWidth = _map->getMapSize().width*_map->getTileSize().width;
+	float mapHeight = _map->getMapSize().height*_map->getTileSize().height;
+	float visibleSizeWidth = 1800;
+	float visibleSizeHeight = 800;
 
-	/*if (rect.containsPoint(locationInNode))尝试加一步判断，失败！
+	switch (code)
 	{
-		_isDrag = true;
-		_posBeginDrag = this->convertToNodeSpace(eventMouse->getLocation());
-		return true;
+	case EventKeyboard::KeyCode::KEY_W:
+		tempPosition += Vec2(0, -10);
+		log("%f,%f", tempPosition.y, visibleSizeHeight - mapHeight);
+		if (tempPosition.y < -300) { break; }//有问题我不知道这个窗口大小 总是出错这个数是我自己试出来的
+		target->setPosition(tempPosition);
+		break;
+	case EventKeyboard::KeyCode::KEY_A:
+		tempPosition += Vec2(10, 0);
+		if (tempPosition.x>0) { break; }
+		target->setPosition(tempPosition);
+		break;
+	case EventKeyboard::KeyCode::KEY_S:
+		tempPosition += Vec2(0, 10);
+		if (tempPosition.y >0) { break; }
+		target->setPosition(tempPosition);
+		break;
+	case EventKeyboard::KeyCode::KEY_D:
+		tempPosition += Vec2(-10, 0);
+		//if (tempPosition.x <visibleSizeWidth - mapWidth) { break; }
+		target->setPosition(tempPosition);
+		break;
 	}
-	else
-	{
-		return false;
-	}*/
-
-}
-
-void MapLayer::clickMoveToDrag(Event *event)
-{
-	auto eventMouse = static_cast<EventMouse*>(event);
-	auto target = static_cast<Layer*>(event->getCurrentTarget());
-
-	auto tempLocation = (target->getPosition() + (target->convertToNodeSpace(eventMouse->getLocation()) - _posBeginDrag));
-	auto visibleSize = Director::getInstance()->getVisibleSize();
-	auto mapSize = _map->getMapSize();
-	if (_isDrag)
-	{
-		/*
-		if (tempLocation.x > 0) { tempLocation.x = 0; }
-		if (tempLocation.x < visibleSize.width- mapSize.width) { tempLocation.x = visibleSize.width - mapSize.width; }尝试防止拉出界，失败！
-		if (tempLocation.y > 0) { tempLocation.y = 0; }
-		if (tempLocation.y < visibleSize.height - mapSize.height) { tempLocation.y = visibleSize.height - mapSize.height; }
-		*/
-		target->setPosition(tempLocation);
-		log("%d   %d", tempLocation.x, tempLocation.y);
-
-	}
-}
-
-void MapLayer::clickUpToDrag(Event *event)
-{
-	auto eventMouse = static_cast<EventMouse*>(event);
-	auto target = static_cast<Layer*>(event->getCurrentTarget());
-
-	_isDrag = false;
 }
 
 void MapLayer::onEnter()
 {
 	Layer::onEnter();
-	auto listener = EventListenerMouse::create();
-
-	listener->onMouseDown = CC_CALLBACK_1(MapLayer::clickDownToDrag, this);
-	listener->onMouseMove = CC_CALLBACK_1(MapLayer::clickMoveToDrag, this);
-	listener->onMouseUp = CC_CALLBACK_1(MapLayer::clickUpToDrag, this);
+	auto listener = EventListenerKeyboard::create();
+	listener->onKeyPressed = CC_CALLBACK_2(MapLayer::move, this);
 
 	EventDispatcher *eventDispatcher = Director::getInstance()->getEventDispatcher();
 	eventDispatcher->addEventListenerWithSceneGraphPriority
@@ -98,6 +82,8 @@ void MapLayer::onExit()
 	Layer::onExit();
 	Director::getInstance()->getEventDispatcher()->removeAllEventListeners();
 }
+
+
 
 
 
@@ -115,31 +101,27 @@ bool MenuLayer::init()
 
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
-	 
+
 	auto yellow = Sprite::create("yellow.png");
 	yellow->setAnchorPoint(Vec2(1, 0.5));
 	yellow->setPosition(Vec2(visibleSize.width, 0.5*visibleSize.height));
 	this->addChild(yellow);
 
-	for (int i = 1; i <= ITEM_AMOUNT ;++i)
+	for (int i = 1; i <= ITEM_AMOUNT; ++i)
 	{
 		auto item = MenuItemImage::create(imageAdress[i - 1], imageAdress[i - 1], imageAdress[i - 1],
-			CC_CALLBACK_1(MenuLayer::callBack, this));
+			[&](Ref *pSender)
+		{_isChosen = true;
+		_kind = this->getTag();
+		if (_kind == zaobing || _kind == zaoche) { _isAdding = true; }; });
 
-		item->setPosition(Vec2(visibleSize.width-25, visibleSize.height*(i+1) / 10));
-		item->setScaleY(0.80);
-		this->addChild(item, 1, i);										//点击造兵键功能未完善
+		item->setPosition(Vec2(visibleSize.width - 25, visibleSize.height*(i + 1) / 10));
+		this->addChild(item, 1, i);
 	}
+
 
 	return true;
 
-}
-
-void MenuLayer::callBack(Ref* pSender)
-{
-	_isChosen = true;
-	_kind = this->getTag();
-if (_kind == zaobing || _kind == zaoche) { _isAdding = true; };
 }
 
 //Game函数定义
@@ -154,13 +136,13 @@ bool Game::init()
 	{
 		return false;
 	}
-	auto visibleSize = Director::getInstance()->getVisibleSize();
+	auto visibleSize = Size(1800, 800);
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
 
 	this->initMapLayer();
 	this->initMenuLayer();
-	
+
 	return true;
 }
 
@@ -168,27 +150,25 @@ void Game::initMapLayer()
 {
 	_mapLayer = MapLayer::create();
 	_mapLayer->setPosition(Vec2::ZERO);
-	this->addChild(_mapLayer,0);
+	this->addChild(_mapLayer, 0);
 }
 
 void Game::initMenuLayer()
 {
 	_menuLayer = MenuLayer::create();
 	_menuLayer->setPosition(Vec2::ZERO);
-	this->addChild(_menuLayer,1);
+	this->addChild(_menuLayer, 1);
 }
 
 Game* Game::create()
 {
-	Game* game=new Game();
+	Game* game = new Game();
 	if (!game->init())
 	{
 		return nullptr;
 	}
 	return game;
 }
-
-
 
 
 

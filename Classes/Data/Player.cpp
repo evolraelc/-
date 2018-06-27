@@ -1,9 +1,11 @@
 #include "cocos2d.h"
 #include "Player.h"
+#include "cocostudio/CocoStudio.h"
+#include "ui/CocosGUI.h"
 #include<string>
 #include<iostream>
 using namespace std;
-
+using namespace cocostudio::timeline;
 bool Player::init()
 {
 	if (!Sprite::init())
@@ -55,10 +57,6 @@ bool Player::init()
 		 inithp = hp = 50;
 		 attack = 20;
 	 }
-   
- 
- 
- 
  
  }
 
@@ -78,26 +76,37 @@ bool Player::isDead()                 //ÅÐ¶ÏÈËÎïÊÇ·ñËÀÍö
 	return _isDead;
 }
 
-void Player::moveToPosition(cocos2d::Vec2 & position)
+void Player::moveToPosition(cocos2d::Vec2 & pos)
 {
-	cocos2d::Vec2  initPos = this->getPosition();
+	float distance = _enemy->getPosition().getDistance(pos);
+	auto moveTo =cocos2d::MoveTo::create(distance / ENEMY_MOVE_SPEED, pos);
+	auto standCall = cocos2d::CallFunc::create([=] {
+		_enemy->stopAllActions();
+		_enemy->runAction(cocos2d::RepeatForever::create(_standAnim));
+	});
+
+	_enemy->stopAllActions();
+	_enemy->setFlippedX(pos.x < _enemy->getPosition().x);
+	_enemy->runAction(cocos2d::RepeatForever::create(_runAnim));
+	_enemy->runAction(cocos2d::Sequence::createWithTwoActions(moveTo, standCall));
+	/*cocos2d::Vec2  initPos = this->getPosition();
 	float x = position.x - initPos.x;
 	float y = position.y - initPos.y;
 	vel.x = x / 10;
 	vel.y = y / 10;
 	this->setVisible(true);
-	this->unscheduleUpdate();
+	this->unscheduleUpdate();*/
 	this->scheduleUpdate();
 
 }
 
 void Player::update(float dt)
 {
-	this->setPosition(cocos2d::Vec2(this->getPosition()+vel*dt));
-	if (dt == 10.0f)
+	static float curTime = 0;
+	curTime += dt;
+	if (curTime > dt * 2.f)
 	{
-		this->unscheduleUpdate();
-		this->removeFromParent();
+		curTime -= dt * 2.f;
 	}
 }
 

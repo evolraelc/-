@@ -5,10 +5,16 @@
 #include "SettingScene.h"
 #include"Manager/GameSceneController.h"
 USING_NS_CC;
-
+using namespace CocosDenshion;
+#define SOUND_KEY "sound_key"
+#define MUSIC_KEY "music_key"
 Scene* Menu_S::createScene()
 {
-	return Menu_S::create();
+	auto scene = Scene::create();
+	auto layer = Menu_S::create();
+	scene->addChild(layer);
+
+	return scene;
 }
 
 static void problemLoading(const char* filename)
@@ -20,7 +26,7 @@ static void problemLoading(const char* filename)
 bool Menu_S::init()
 {
 
-	if (!Scene::init())
+	if (!Layer::init())
 	{
 		return false;
 	}
@@ -61,6 +67,11 @@ void Menu_S::menuSettingCallback(cocos2d::Ref* pSender)
 {
 	auto gc =Setting::createScene();
 	Director::getInstance()->pushScene(gc);
+
+	if (UserDefault::getInstance()->getBoolForKey(SOUND_KEY)) {
+		
+			SimpleAudioEngine::getInstance()->playEffect("2.mp3");
+	}
 }
 
 
@@ -68,4 +79,47 @@ void Menu_S::menuHelpCallback(cocos2d::Ref* pSender)
 {
 	auto he = Help::createScene();
 	Director::getInstance()->pushScene(he);
+}
+
+
+void Menu_S::onEnter()
+{
+	Layer::onEnter();
+	log("HelloWorld onEnter");
+}
+
+
+void Menu_S::onEnterTransitionDidFinish()
+{
+	Layer::onEnterTransitionDidFinish();
+	log("HelloWorld onEnterTransitionDidFinish");
+
+
+	//²¥·Å  
+	if (UserDefault::getInstance()->getBoolForKey(MUSIC_KEY)) {
+			SimpleAudioEngine::getInstance()->playBackgroundMusic("1.mp3", true);
+	}
+}
+
+
+void Menu_S::onExit()
+{
+	Layer::onExit();
+	log("HelloWorld onExit");
+}
+
+
+void Menu_S::onExitTransitionDidStart()
+{
+	Layer::onExitTransitionDidStart();
+	log("HelloWorld onExitTransitionDidStart");
+}
+
+
+void Menu_S::cleanup()
+{
+	Layer::cleanup();
+	log("HelloWorld cleanup");
+	//Í£Ö¹  
+	SimpleAudioEngine::getInstance()->stopBackgroundMusic("1.mp3");
 }

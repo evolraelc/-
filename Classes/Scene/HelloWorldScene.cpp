@@ -148,7 +148,6 @@ void HelloWorld::menuItemMenuCallback(Ref* pSender)
 {
 	auto sc = Menu_S::createScene();
 	Director::getInstance()->pushScene(sc);
-
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	exit(0);
 #endif

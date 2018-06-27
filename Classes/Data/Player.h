@@ -8,11 +8,10 @@
 #include<iostream>
 using namespace std;
 
+
 class Player : public cocos2d::Sprite
 {
 private:
-	Sprite* soldier ;
-	Sprite* tank;
 	int number;
 	CC_SYNTHESIZE(int, inithp, _inithp);       //初始血量
 	CC_SYNTHESIZE(int, hp, _hp);               //现在血量
@@ -21,6 +20,14 @@ private:
 	bool  _isDead = false;                     //玩家是否死亡
 	bool _alreadyDead = false;                 //玩家是否真正的死亡
 	bool _getAttack = false;
+
+
+    Sprite* soldier ;
+	Sprite* tank;
+	Sprite * _enemy;
+	cocos2d::Animate *_runAnim, *_standAnim;
+	cocos2d::Label* _lblInfo;
+	float ENEMY_MOVE_SPEED;
 public:
 	Player(){};
 

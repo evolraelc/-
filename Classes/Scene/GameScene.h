@@ -2,10 +2,10 @@
 #ifndef __GAMESCENE_H__
 #define __GAMESCENE_H__
 #include "cocos2d.h"
-#include"ui/CocosGUI.h"
+#include "ui/CocosGUI.h"
 USING_NS_CC;
 using namespace std;
-const int  ITEM_AMOUNT = 8;
+const int  ITEM_AMOUNT = 7;
 enum
 {
 	MAP_LAYER_TAG,
@@ -30,7 +30,6 @@ const string imageAdress[ITEM_AMOUNT]
 "warfactory.png",
 "Item_zaobing.png",
 "Item_zaoche.png",
-"Item_dog.png"
 
 };
 /*这个场景为游戏场景，分为三层：地图，菜单层，文本层*/
@@ -43,20 +42,21 @@ private:
 	TMXTiledMap * _map;
 	TMXLayer * _collidable;
 	bool _isDrag;			//鼠标是否在拖动
+	Sprite * _boss;
 	Vec2 _posBeginDrag;
 public:
-	bool init();
-
-	bool clickDownToDrag(Event* event);
-	void clickMoveToDrag(Event *event);
-	void clickUpToDrag(Event *event);
+	virtual bool init();
+	CREATE_FUNC(MapLayer);
+	void move(EventKeyboard::KeyCode code, Event *event);
 
 	void onEnter();
 	void onExit();
-	CREATE_FUNC(MapLayer);
 
 	friend class Game;
 	friend class GameController;
+
+	
+
 };
 
 
@@ -64,16 +64,13 @@ class MenuLayer :public Layer
 {
 private:
 	bool _isChosen;
-	int _kind;
-
-	bool _isAdding;
+	int   _kind;
+	bool  _isAdding;
 
 public:
 	bool init();
 	bool getIsChosen() { return _isChosen; };
 	void setIsChosen(bool a) { _isChosen = a; };
-	void callBack(Ref* pSender);
-	
 	CREATE_FUNC(MenuLayer);
 	friend class Game;
 	friend class GameController;
@@ -83,7 +80,7 @@ public:
 
 
 
-class Game:public Scene
+class Game :public Scene
 {
 private:
 	MapLayer * _mapLayer;
@@ -103,7 +100,6 @@ public:
 	friend class GameController;
 
 };
-
 
 
 
