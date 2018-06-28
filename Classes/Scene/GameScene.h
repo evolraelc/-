@@ -39,11 +39,11 @@ class GameController;
 class MapLayer :public Layer
 {
 private:
-	TMXTiledMap * _map;
-	TMXLayer * _collidable;
-	bool _isDrag;			//鼠标是否在拖动
-	Sprite * _boss;
-	Vec2 _posBeginDrag;
+	TMXTiledMap *    _map;
+	TMXLayer *       _collidable;
+	bool             _isDrag;			//鼠标是否在拖动
+	Sprite *         _boss;
+	Vec2             _posBeginDrag;
 public:
 	virtual bool init();
 	CREATE_FUNC(MapLayer);

@@ -9,7 +9,6 @@ class Setting :public cocos2d::Layer
 	bool isEffect;
 public:
 	static cocos2d::Scene* createScene();
-
 	virtual bool init();
 	void onEnter();
 	void menuSettingIsOkCallback(Ref* pSender);

@@ -1,4 +1,5 @@
 #include"GameSceneController.h"
+#include "Scene/GameOver.h"
 #include "Data/Architecture.h"
 #include "Data/Player.h"
 #include"cocos2d.h"
@@ -15,6 +16,8 @@ bool GameController::init()
 		_gameScene = Game::create(); 
 
 		_yes = false;
+		_gameover = false;
+		_initmoney = 100;
 		EventDispatcher *eventDispatcher = Director::getInstance()->getEventDispatcher();
 
 	
@@ -175,6 +178,87 @@ void GameController::addBuilding(cocos2d::Vec2& Pos, int kind)
 			break;
 		}
 }
+
+void GameController::update(float dt)
+{
+	static float curTime = 0;
+	curTime += dt;
+	if (curTime > dt * 2.f )
+	{
+		curTime -= dt * 2.f;
+	}
+}
+
+
+void GameController::initEnemy(cocos2d::Vec2& Pos)
+{
+	ENEMY_MOVE_SPEED = 100.f;
+	auto runAnimation = Animation::create();
+	for (int i = 0; i<5; ++i)
+	{
+		auto fileName = StringUtils::format("enemy/run%d.png", i);
+		runAnimation->addSpriteFrameWithFile(fileName);
+	}
+	runAnimation->setDelayPerUnit(0.1f);
+	_runAnim = Animate::create(runAnimation);
+	_runAnim->retain();
+
+	auto standAnimation = Animation::create();
+	for (int i = 0; i<3; ++i)
+	{
+		auto fileName = StringUtils::format("enemy/stand%d.png", i);
+		standAnimation->addSpriteFrameWithFile(fileName);
+	}
+	standAnimation->setDelayPerUnit(0.2f);
+	_standAnim = Animate::create(standAnimation);
+	_standAnim->retain();
+
+	_enemy = Sprite::create();
+	_enemy->setPosition(Pos);
+	this->_gameScene->_mapLayer->addChild(_enemy);
+	_enemy->runAction(RepeatForever::create(_standAnim));
+	_yes = true;
+}
+
+
+void GameController::runAndStand(const Vec2& pos)
+{
+	if (600 - _enemy->getPosition().x > 20 && 300 - _enemy->getPosition().y > 20)
+	{
+		float distance = _enemy->getPosition().getDistance(pos);
+		auto moveTo = MoveTo::create(distance / ENEMY_MOVE_SPEED, pos);
+		auto standCall = CallFunc::create([=] {
+			_enemy->stopAllActions();
+			_enemy->runAction(RepeatForever::create(_standAnim));
+		});
+		_enemy->stopAllActions();
+		_enemy->setFlippedX(pos.x < _enemy->getPosition().x);
+		_enemy->runAction(RepeatForever::create(_runAnim));
+		_enemy->runAction(Sequence::createWithTwoActions(moveTo, standCall));
+	}
+	else
+	{
+		this->_gameScene->_mapLayer->removeChildByTag(100);
+		Director::getInstance()->end();
+	}
+	
+}
+
+
+bool GameController::onTouchBegan(Event *event)
+{
+	auto eventMouse = static_cast<EventMouse*>(event);
+	auto target = static_cast<Sprite*>(eventMouse->getCurrentTarget());
+	auto a = eventMouse->getLocation();
+	log("%f  %f", a.x, a.y);
+	if (_yes)
+	{
+		this->runAndStand(this->_gameScene->_mapLayer->convertToNodeSpace
+		(Vec2(a.x, 300 - a.y)));
+	}
+	return true;
+}
+
 void GameController::add(EventKeyboard::KeyCode code, Event *event)
 {
 	auto eventMouse = static_cast<EventKeyboard*>(event);
@@ -216,74 +300,12 @@ void GameController::add(EventKeyboard::KeyCode code, Event *event)
 	}
 }
 
-
-void GameController::update(float dt)
+void GameController::money_had(int kind)
 {
-	static float curTime = 0;
-	curTime += dt;
-	if (curTime > dt * 2.f)
-	{
-		curTime -= dt * 2.f;
-	}
+	int realM = _initmoney - _price[kind];
+
 }
 
-
-void GameController::initEnemy(cocos2d::Vec2& Pos)
+void GameController::gameIsOver()
 {
-	ENEMY_MOVE_SPEED = 100.f;
-	auto runAnimation = Animation::create();
-	for (int i = 0; i<5; ++i)
-	{
-		auto fileName = StringUtils::format("enemy/run%d.png", i);
-		runAnimation->addSpriteFrameWithFile(fileName);
-	}
-	runAnimation->setDelayPerUnit(0.1f);
-	_runAnim = Animate::create(runAnimation);
-	_runAnim->retain();
-
-	auto standAnimation = Animation::create();
-	for (int i = 0; i<3; ++i)
-	{
-		auto fileName = StringUtils::format("enemy/stand%d.png", i);
-		standAnimation->addSpriteFrameWithFile(fileName);
-	}
-	standAnimation->setDelayPerUnit(0.2f);
-	_standAnim = Animate::create(standAnimation);
-	_standAnim->retain();
-
-	_enemy = Sprite::create();
-	_enemy->setPosition(Pos);
-	this->_gameScene->_mapLayer->addChild(_enemy);
-	_enemy->runAction(RepeatForever::create(_standAnim));
-	_yes = true;
-}
-
-
-void GameController::runAndStand(const Vec2& pos)
-{
-	float distance = _enemy->getPosition().getDistance(pos);
-	auto moveTo = MoveTo::create(distance / ENEMY_MOVE_SPEED, pos);
-	auto standCall = CallFunc::create([=] {
-		_enemy->stopAllActions();
-		_enemy->runAction(RepeatForever::create(_standAnim));
-	});
-	_enemy->stopAllActions();
-	_enemy->setFlippedX(pos.x < _enemy->getPosition().x);
-	_enemy->runAction(RepeatForever::create(_runAnim));
-	_enemy->runAction(Sequence::createWithTwoActions(moveTo, standCall));
-}
-
-
-bool GameController::onTouchBegan(Event *event)
-{
-	auto eventMouse = static_cast<EventMouse*>(event);
-	auto target = static_cast<Sprite*>(eventMouse->getCurrentTarget());
-	auto a = eventMouse->getLocation();
-	log("%f  %f", a.x, a.y);
-	if (_yes)
-	{
-		this->runAndStand(this->_gameScene->_mapLayer->convertToNodeSpace
-		(Vec2(a.x, 300 - a.y)));
-	}
-	return true;
 }
